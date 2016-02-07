@@ -4,10 +4,10 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/andrejsavikin/DiscordLink"
   },
   "author": "Sava",
-  "license": "https://github.com/andrejsavikin/DiscordLink",
+  "license": "https://github.com/andrejsavikin/DiscordLink/blob/master/LICENSE",
   "bugs": {
     "url": "https://github.com/andrejsavikin/DiscordLink/issues"
   },
