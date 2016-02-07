@@ -1,0 +1,19 @@
+{"name": "DiscordLink",
+  "version": "1.0.0",
+  "description": "App that links beam.pro chat, twitch chat and discord",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Sava",
+  "license": "https://github.com/andrejsavikin/DiscordLink",
+  "bugs": {
+    "url": "https://github.com/andrejsavikin/DiscordLink/issues"
+  },
+  "dependencies": {
+    "beam-client-node": "^0.1.2",
+    "irc": "^0.4.1",
+    "discord.io": "^1.7.1"
+  }
+}
