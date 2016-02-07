@@ -1,0 +1,17 @@
+{
+  "twitch":{
+    "username":"twitch username",
+    "oauth":"twtich oauth key",
+    "channel":"owner channel with # infront ie. #andrejsavikin"
+  },
+  "beam":{
+    "username":"beam username",
+    "password":"beam password",
+    "channel":"channel name ie. Sava"
+  },
+  "discord":{
+    "email":"discord email",
+    "password":"discord password",
+    "channel":"name of a created text room on discord ie. streamchat"
+  }
+}
