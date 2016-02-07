@@ -30,7 +30,7 @@ beam.use('password', {
     socket.on('ChatMessage', function (data) {
         console.log('Beam message! ' + data.message.message[0].data);
         if(data.user_name != config.beam.username){
-          Tbot.say(config.twitch.channel, '[Sava:' + data.user_name + ']' + data.message.message[0].data);
+          Tbot.say(config.twitch.channel, '[Beam:' + data.user_name + ']' + data.message.message[0].data);
           Dbot.sendMessage({
             to: DChannelId,
             message: '[Beam:' + data.user_name + '] ' + data.message.message[0].data
