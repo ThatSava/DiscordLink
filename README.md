@@ -1,5 +1,6 @@
 # DiscordLink
 App that links beam.pro chat, twitch chat and discord
+
 ## Installation
 1. Download and extract
 ```Bash
@@ -15,6 +16,7 @@ mv config.example config.json
 node main.js
 ```
 5. Profit
+
 ##Dependencies
 * [irc](https://www.npmjs.com/package/irc)
 * [discord.io](https://www.npmjs.com/package/discord.io)
