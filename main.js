@@ -63,7 +63,7 @@ var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
 Tbot.send('PASS', config.twitch.oauth);
 
 //Get discord channelid
-var DChannelId;
+var DChannelId = 0;
 Dbot.on('ready', function() {
   for(var counter in Dbot.servers){
     for(var counter1 in Dbot.servers[counter].channels){
@@ -76,7 +76,7 @@ Dbot.on('ready', function() {
 
 //Listens to messages on discord
 Dbot.on('message', function(user, userID, channelID, message, rawEvent) {
-  if(userID != Dbot.id){
+  if(userID != Dbot.id && channelID == DChannelId){
     Tbot.say(config.twitch.channel, '[Discord:' + user + ']' + message);
     socket.call('msg', ['[Discord:' + user + '] ' + message ]);
   }

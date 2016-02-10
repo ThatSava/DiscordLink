@@ -5,8 +5,9 @@ App that links beam.pro chat, twitch chat and discord
 1. Download and extract `git clone https://github.com/andrejsavikin/DiscordLink.git`
 2. Rename config.example to config.json `mv config.example config.json`
 3. Edit config.json with your desired settings
-4. Run the application `node main.js`
-5. Profit
+4. Install dependencies with `npm install`
+5. Run the application `node main.js`
+6. Profit
 
 ##Dependencies
 * [irc](https://www.npmjs.com/package/irc)
