@@ -52,6 +52,11 @@ var Dbot = new DiscordClient({
     password: config.discord.password
 });
 
+//Reconnect to discord server in case of websocket closed
+Dbot.on('disconnected', function() {
+  Dbot.connect();
+});
+
 //Connect to twitch server
 var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
   port: 6667,
