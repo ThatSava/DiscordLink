@@ -37,7 +37,7 @@ beam.use('password', {
             }else if(data.message.message[i].type == 'link'){
               compiled = compiled + data.message.message[i].text;
             }else if(data.message.message[i].type == 'emoticon'){
-              compiled = compiled + data.message.message[i].pack;
+              compiled = compiled + data.message.message[i].text;
             }else if(data.message.message[i].type == 'inaspacesuit'){
               compiled = compiled + data.message.message[i].text;
             }
