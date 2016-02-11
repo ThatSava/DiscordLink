@@ -37,6 +37,12 @@ beam.use('password', {
           });
       }
     });
+
+    //Reconnect to beam in case of socket error
+    socket.on('closed', function() {
+        socket.boot();
+    });
+
 }).catch(function (err) {
     //If this is a failed request, don't log the entire request. Just log the body
     if(err.message !== undefined && err.message.body !== undefined) {
