@@ -5,7 +5,7 @@ var DiscordClient = require('discord.io');
 var Beam = require('beam-client-node');
 var BeamSocket = require('beam-client-node/lib/ws');
 
-//Connect to beam server and listen to beam messages all in once
+//Connect to beam server and listen to beam messages all in one
 var beam = new Beam();
 var socket;
 
@@ -30,10 +30,22 @@ beam.use('password', {
     socket.on('ChatMessage', function (data) {
         console.log('Beam message! ' + data.message.message[0].data);
         if(data.user_name != config.beam.username){
-          Tbot.say(config.twitch.channel, '[Beam:' + data.user_name + ']' + data.message.message[0].data);
+          var compiled = '';
+          for(i in data.message.message) {
+            if (data.message.message[i].type == 'text'){
+              compiled = compiled + data.message.message[i].data;
+            }else if(data.message.message[i].type == 'link'){
+              compiled = compiled + data.message.message[i].text;
+            }else if(data.message.message[i].type == 'emoticon'){
+              compiled = compiled + data.message.message[i].pack;
+            }else if(data.message.message[i].type == 'inaspacesuit'){
+              compiled = compiled + data.message.message[i].text;
+            }
+          };
+          Tbot.say(config.twitch.channel, '[Beam:' + data.user_name + ']' + compiled);
           Dbot.sendMessage({
             to: DChannelId,
-            message: '[Beam:' + data.user_name + '] ' + data.message.message[0].data
+            message: '[Beam:' + data.user_name + '] ' + compiled
           });
       }
     });
