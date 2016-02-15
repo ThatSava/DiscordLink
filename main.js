@@ -81,7 +81,8 @@ var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
   channels: [config.twitch.channel],
   debug: false,
   password: config.twitch.oauth,
-  username: config.twitch.username
+  username: config.twitch.username,
+  autoRejoin: true
 });
 Tbot.send('PASS', config.twitch.oauth);
 
@@ -100,8 +101,8 @@ Dbot.on('ready', function() {
 //Listens to messages on discord
 Dbot.on('message', function(user, userID, channelID, message, rawEvent) {
   if(userID != Dbot.id && channelID == DChannelId){
-    Tbot.say(config.twitch.channel, '[Discord:' + user + ']' + message);
-    socket.call('msg', ['[Discord:' + user + '] ' + message ]);
+    Tbot.say(config.twitch.channel, '[Discord:' + user + ']' + Dbot.fixMessage(message));
+    socket.call('msg', ['[Discord:' + user + '] ' + Dbot.fixMessage(message) ]);
   }
   console.log("Discord message! " + message);
 });
