@@ -6,6 +6,7 @@ var Beam = require('beam-client-node');
 var BeamSocket = require('beam-client-node/lib/ws');
 
 //Connect to beam server and listen to beam messages all in one
+if(config.beam.enabled == "true"){
 var beam = new Beam();
 var socket;
 
@@ -41,12 +42,8 @@ beam.use('password', {
             }else if(data.message.message[i].type == 'inaspacesuit'){
               compiled = compiled + data.message.message[i].text;
             }
-          };
-          Tbot.say(config.twitch.channel, '[Beam:' + data.user_name + ']' + compiled);
-          Dbot.sendMessage({
-            to: DChannelId,
-            message: '[Beam:' + data.user_name + '] ' + compiled
-          });
+          }
+            sendMessages("Beam", data.user_name, compiled);
       }
     });
 
@@ -62,20 +59,44 @@ beam.use('password', {
     }
     console.log('error joining chat:', err);
 });
+}
 
 //Connect to discord server
-var Dbot = new DiscordClient({
-    autorun: true,
-    email: config.discord.email,
-    password: config.discord.password
-});
+if(config.discord.enabled) {
+    var Dbot = new DiscordClient({
+        autorun: true,
+        //email: config.discord.email,
+        token: config.discord.token
+        //password: config.discord.password
+    });
 
+//Get discord channelid
+    var DChannelId = 0;
+    Dbot.on('ready', function () {
+        for (var counter in Dbot.servers) {
+            for (var counter1 in Dbot.servers[counter].channels) {
+                if (Dbot.servers[counter].channels[counter1].name == config.discord.channel && Dbot.servers[counter].channels[counter1].type == 'text') {
+                    DChannelId = Dbot.servers[counter].channels[counter1].id;
+                }
+            }
+        }
+    });
+
+//Listens to messages on discord
+    Dbot.on('message', function (user, userID, channelID, message, rawEvent) {
+        if (userID != Dbot.id && channelID == DChannelId) {
+            sendMessages("Discord", user, Dbot.fixMessage(message));
+        }
+        console.log("Discord message! " + message);
+    });
 //Reconnect to discord server in case of websocket closed
-Dbot.on('disconnected', function() {
-  Dbot.connect();
-});
+    Dbot.on('disconnected', function () {
+        Dbot.connect();
+    });
+}
 
 //Connect to twitch server
+if(config.twitch.enabled){
 var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
   port: 6667,
   channels: [config.twitch.channel],
@@ -86,33 +107,44 @@ var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
 });
 Tbot.send('PASS', config.twitch.oauth);
 
-//Get discord channelid
-var DChannelId = 0;
-Dbot.on('ready', function() {
-  for(var counter in Dbot.servers){
-    for(var counter1 in Dbot.servers[counter].channels){
-      if(Dbot.servers[counter].channels[counter1].name == config.discord.channel && Dbot.servers[counter].channels[counter1].type == 'text'){
-        DChannelId = Dbot.servers[counter].channels[counter1].id;
-      }
-    }
-  }
-});
-
-//Listens to messages on discord
-Dbot.on('message', function(user, userID, channelID, message, rawEvent) {
-  if(userID != Dbot.id && channelID == DChannelId){
-    Tbot.say(config.twitch.channel, '[Discord:' + user + ']' + Dbot.fixMessage(message));
-    socket.call('msg', ['[Discord:' + user + '] ' + Dbot.fixMessage(message) ]);
-  }
-  console.log("Discord message! " + message);
-});
-
 //Listens to messages from twitch
 Tbot.addListener("message", function (from, to, text, message) {
   console.log("Twitch message! " + text);
-    Dbot.sendMessage({
-      to: DChannelId,
-      message: '[Twitch:' + from + '] ' + text
-    });
-    socket.call('msg', ['[Twitch:' + from + '] ' + text ]);
+    sendMessages("Twitch", from, text);
 });
+}
+
+//Sends the messages
+function sendMessages(from, user, message){
+    switch(from) {
+        case "Beam":
+            if (config.twitch.enabled == "true"){
+                Tbot.say(config.twitch.channel, '[' + from + ':' + user + ']' + message);
+            }
+            if(config.discord.enabled == "true"){
+                Dbot.sendMessage({
+                    to: DChannelId,
+                    message: '[' + from + ':' + user + '] ' + message
+                });
+            }
+            break;
+        case "Twitch":
+            if(config.discord.enabled == "true"){
+                Dbot.sendMessage({
+                    to: DChannelId,
+                    message: '[' + from + ':' + user + '] ' + message
+                });
+            }
+            if(config.beam.enabled == "true"){
+                socket.call('msg', ['[' + from + ':' + user + '] ' + message ]);
+            }
+            break;
+        case "Discord":
+            if(config.beam.enabled == "true"){
+                socket.call('msg', ['[' + from + ':' + user + '] ' + message ]);
+            }
+            if (config.twitch.enabled == "true"){
+                Tbot.say(config.twitch.channel, '[' + from + ':' + user + ']' + message);
+            }
+    }
+}
