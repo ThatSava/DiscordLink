@@ -1,5 +1,5 @@
 {"name": "DiscordLink",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "App that links beam.pro chat, twitch chat and discord",
   "main": "main.js",
   "repository": {

@@ -3,17 +3,18 @@
     "enabled":"true/false",
     "username":"twitch username",
     "oauth":"twtich oauth key",
-    "channel":"owner channel with # infront ie. #andrejsavikin"
+    "channel":"owner channel with # infront ie. #andrejsavikin",
+    "prefix":"[%s:%u]"
   },
   "beam":{
     "enabled":"true/false",
     "username":"beam username",
     "password":"beam password",
-    "channel":"channel name ie. Sava"
+    "channel":"channel name ie. Sava",
   },
   "discord":{
     "enabled":"true/false",
     "token":"bot user token from https://discordapp.com/developers/applications/me",
-    "channel":"name of a created text room on discord ie. streamchat"
+    "channel":"name of a created text room on discord ie. streamchat",
   }
 }

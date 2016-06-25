@@ -3,7 +3,18 @@ var config = require('./config.json');
 var irc = require('irc');
 var DiscordClient = require('discord.io');
 var Beam = require('beam-client-node');
-var BeamSocket = require('beam-client-node/lib/ws');
+var BeamSocket = require('beam-client-node/lib/ws/ws.js');
+
+//Custom prefixes and suffixes
+//Suggested by: @apple99er
+function getPrefix(service){
+    if(config[service].prefix){
+        return config[service].prefix;
+    }
+    else {
+        return "[%s:%u]";
+    }
+}
 
 //Connect to beam server and listen to beam messages all in one
 if(config.beam.enabled == "true"){
@@ -43,7 +54,7 @@ beam.use('password', {
               compiled = compiled + data.message.message[i].text;
             }
           }
-            sendMessages("Beam", data.user_name, compiled);
+            sendMessages("beam", data.user_name, compiled);
       }
     });
 
@@ -85,7 +96,7 @@ if(config.discord.enabled) {
 //Listens to messages on discord
     Dbot.on('message', function (user, userID, channelID, message, rawEvent) {
         if (userID != Dbot.id && channelID == DChannelId) {
-            sendMessages("Discord", user, Dbot.fixMessage(message));
+            sendMessages("discord", user, Dbot.fixMessage(message));
         }
         console.log("Discord message! " + message);
     });
@@ -110,41 +121,41 @@ Tbot.send('PASS', config.twitch.oauth);
 //Listens to messages from twitch
 Tbot.addListener("message", function (from, to, text, message) {
   console.log("Twitch message! " + text);
-    sendMessages("Twitch", from, text);
+    sendMessages("twitch", from, text);
 });
 }
 
 //Sends the messages
 function sendMessages(from, user, message){
     switch(from) {
-        case "Beam":
+        case "beam":
             if (config.twitch.enabled == "true"){
-                Tbot.say(config.twitch.channel, '[' + from + ':' + user + ']' + message);
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Twitch").replace("%u", user) + message);
             }
             if(config.discord.enabled == "true"){
                 Dbot.sendMessage({
                     to: DChannelId,
-                    message: '[' + from + ':' + user + '] ' + message
+                    message: getPrefix("discord").replace("%s", "Discord").replace("%u", user) + message
                 });
             }
             break;
-        case "Twitch":
+        case "twitch":
             if(config.discord.enabled == "true"){
                 Dbot.sendMessage({
                     to: DChannelId,
-                    message: '[' + from + ':' + user + '] ' + message
+                    message: getPrefix("discord").replace("%s", "Discord").replace("%u", user) + message
                 });
             }
             if(config.beam.enabled == "true"){
-                socket.call('msg', ['[' + from + ':' + user + '] ' + message ]);
+                socket.call('msg', [getPrefix("beam").replace("%s", "Beam").replace("%u", user) + message ]);
             }
             break;
-        case "Discord":
+        case "discord":
             if(config.beam.enabled == "true"){
-                socket.call('msg', ['[' + from + ':' + user + '] ' + message ]);
+                socket.call('msg', [getPrefix("beam").replace("%s", "Beam").replace("%u", user) + message ]);
             }
             if (config.twitch.enabled == "true"){
-                Tbot.say(config.twitch.channel, '[' + from + ':' + user + ']' + message);
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Twitch").replace("%u", user) + message);
             }
     }
 }
