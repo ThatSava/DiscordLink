@@ -26,5 +26,8 @@ App that links beam.pro chat, twitch chat and discord
 * %u will be replaced with the user name ie. Sava
 * Default format is `[%s:%u]`
 
+### Contact
+[![Discord](https://discordapp.com/api/servers/69730004467986432/widget.png?style=banner4)](https://discord.gg/jBRvWct)
+
 ### Notable mentions:
 * @apple99er for the custom prefix idea
