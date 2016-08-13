@@ -130,12 +130,12 @@ function sendMessages(from, user, message){
     switch(from) {
         case "beam":
             if (config.twitch.enabled == "true"){
-                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Twitch").replace("%u", user) + message);
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Beam").replace("%u", user) + message);
             }
             if(config.discord.enabled == "true"){
                 Dbot.sendMessage({
                     to: DChannelId,
-                    message: getPrefix("discord").replace("%s", "Discord").replace("%u", user) + message
+                    message: getPrefix("discord").replace("%s", "Beam").replace("%u", user) + message
                 });
             }
             break;
@@ -143,19 +143,19 @@ function sendMessages(from, user, message){
             if(config.discord.enabled == "true"){
                 Dbot.sendMessage({
                     to: DChannelId,
-                    message: getPrefix("discord").replace("%s", "Discord").replace("%u", user) + message
+                    message: getPrefix("discord").replace("%s", "Twitch").replace("%u", user) + message
                 });
             }
             if(config.beam.enabled == "true"){
-                socket.call('msg', [getPrefix("beam").replace("%s", "Beam").replace("%u", user) + message ]);
+                socket.call('msg', [getPrefix("beam").replace("%s", "Twitch").replace("%u", user) + message ]);
             }
             break;
         case "discord":
             if(config.beam.enabled == "true"){
-                socket.call('msg', [getPrefix("beam").replace("%s", "Beam").replace("%u", user) + message ]);
+                socket.call('msg', [getPrefix("beam").replace("%s", "Discord").replace("%u", user) + message ]);
             }
             if (config.twitch.enabled == "true"){
-                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Twitch").replace("%u", user) + message);
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Discord").replace("%u", user) + message);
             }
     }
 }
