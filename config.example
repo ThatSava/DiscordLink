@@ -15,6 +15,6 @@
   "discord":{
     "enabled":"true/false",
     "token":"bot user token from https://discordapp.com/developers/applications/me",
-    "channel":"name of a created text room on discord ie. streamchat"
+    "channelID":"id of a created text room on discord ie. streamchat"
   }
 }
