@@ -105,9 +105,15 @@ var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
 Tbot.send('PASS', config.twitch.oauth);
 
 //Listens to messages from twitch
-Tbot.addListener("message", function (from, to, text, message) {
-  console.log("Twitch message recieved! " + text);
+Tbot.addListener("message" + config.twitch.channel, function (from, text, message) {
+    console.log("Twitch message recieved! " + text);
     sendMessages("twitch", from, text);
+});
+Tbot.addListener("action", function (from, to, text, message) {
+    if(to == config.twitch.channel){
+        console.log("Twitch action recieved! " + text);
+        sendMessages("twitch", from, "*" + text + "*");
+    }
 });
 }
 
