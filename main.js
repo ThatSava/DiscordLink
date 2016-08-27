@@ -1,7 +1,7 @@
 //Define vars
 var config = require('./config.json');
 var irc = require('irc');
-var DiscordClient = require('discord.io');
+var Eris = require('eris');
 var Beam = require('beam-client-node');
 var BeamSocket = require('beam-client-node/lib/ws/ws.js');
 
@@ -74,34 +74,20 @@ beam.use('password', {
 
 //Connect to discord server
 if(config.discord.enabled) {
-    var Dbot = new DiscordClient({
-        autorun: true,
-        //email: config.discord.email,
-        token: config.discord.token
-        //password: config.discord.password
-    });
-
+    var Dbot = new Eris(config.discord.token);
+    Dbot.connect();
 //Get discord channelid
-    var DChannelId = 0;
-    Dbot.on('ready', function () {
-        for (var counter in Dbot.servers) {
-            for (var counter1 in Dbot.servers[counter].channels) {
-                if (Dbot.servers[counter].channels[counter1].name == config.discord.channel && Dbot.servers[counter].channels[counter1].type == 'text') {
-                    DChannelId = Dbot.servers[counter].channels[counter1].id;
-                }
-            }
-        }
-    });
+    var DChannelId = config.discord.channelID;
 
 //Listens to messages on discord
-    Dbot.on('message', function (user, userID, channelID, message, rawEvent) {
-        if (userID != Dbot.id && channelID == DChannelId) {
-            sendMessages("discord", user, Dbot.fixMessage(message));
+    Dbot.on('messageCreate', function (msg) {
+        if (msg.author.id != Dbot.user.id && msg.channel.id == DChannelId) {
+            sendMessages("discord", msg.author.username, msg.cleanContent?msg.cleanContent:msg.content);
+            console.log("Discord message recieved! " + msg.content + msg.cleanContent);
         }
-        console.log("Discord message! " + message);
     });
 //Reconnect to discord server in case of websocket closed
-    Dbot.on('disconnected', function () {
+    Dbot.on('disconnect', function () {
         Dbot.connect();
     });
 }
@@ -120,7 +106,7 @@ Tbot.send('PASS', config.twitch.oauth);
 
 //Listens to messages from twitch
 Tbot.addListener("message", function (from, to, text, message) {
-  console.log("Twitch message! " + text);
+  console.log("Twitch message recieved! " + text);
     sendMessages("twitch", from, text);
 });
 }
@@ -133,18 +119,12 @@ function sendMessages(from, user, message){
                 Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Beam").replace("%u", user) + message);
             }
             if(config.discord.enabled == "true"){
-                Dbot.sendMessage({
-                    to: DChannelId,
-                    message: getPrefix("discord").replace("%s", "Beam").replace("%u", user) + message
-                });
+                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Beam").replace("%u", user) + message);
             }
             break;
         case "twitch":
             if(config.discord.enabled == "true"){
-                Dbot.sendMessage({
-                    to: DChannelId,
-                    message: getPrefix("discord").replace("%s", "Twitch").replace("%u", user) + message
-                });
+                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Twitch").replace("%u", user) + message);
             }
             if(config.beam.enabled == "true"){
                 socket.call('msg', [getPrefix("beam").replace("%s", "Twitch").replace("%u", user) + message ]);
