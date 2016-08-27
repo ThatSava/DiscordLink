@@ -3,7 +3,7 @@ var config = require('./config.json');
 var irc = require('irc');
 var Eris = require('eris');
 var Beam = require('beam-client-node');
-var BeamSocket = require('beam-client-node/lib/ws/ws.js');
+var BeamSocket = require('beam-client-node/lib/ws');
 
 //Custom prefixes and suffixes
 //Suggested by: @apple99er
@@ -36,11 +36,11 @@ beam.use('password', {
 }).then(function (res) {
     var data = res.body;
     socket = new BeamSocket(data.endpoints).boot();
-    return socket.call('auth', [BchannelID, BuserID, data.authkey]);
+    return socket.auth(BchannelID, BuserID, data.authkey);
 }).then(function(){
-    console.log('You are now authenticated!');
+    console.log('You are now authenticated with beam!');
     socket.on('ChatMessage', function (data) {
-        console.log('Beam message! ' + data.message.message[0].data);
+
         if(data.user_name != config.beam.username){
           var compiled = '';
           for(i in data.message.message) {
@@ -52,8 +52,11 @@ beam.use('password', {
               compiled = compiled + data.message.message[i].text;
             }else if(data.message.message[i].type == 'inaspacesuit'){
               compiled = compiled + data.message.message[i].text;
+            }else if(data.message.message[i].type == 'tag'){
+              compiled = compiled + data.message.message[i].text;
             }
           }
+            console.log('Beam message received! ' + compiled);
             sendMessages("beam", data.user_name, compiled);
       }
     });
@@ -83,7 +86,7 @@ if(config.discord.enabled) {
     Dbot.on('messageCreate', function (msg) {
         if (msg.author.id != Dbot.user.id && msg.channel.id == DChannelId) {
             sendMessages("discord", msg.author.username, msg.cleanContent?msg.cleanContent:msg.content);
-            console.log("Discord message recieved! " + msg.content + msg.cleanContent);
+            console.log("Discord message received! " + msg.content + msg.cleanContent);
         }
     });
 //Reconnect to discord server in case of websocket closed
@@ -106,12 +109,12 @@ Tbot.send('PASS', config.twitch.oauth);
 
 //Listens to messages from twitch
 Tbot.addListener("message" + config.twitch.channel, function (from, text, message) {
-    console.log("Twitch message recieved! " + text);
+    console.log("Twitch message received! " + text);
     sendMessages("twitch", from, text);
 });
 Tbot.addListener("action", function (from, to, text, message) {
     if(to == config.twitch.channel){
-        console.log("Twitch action recieved! " + text);
+        console.log("Twitch action received! " + text);
         sendMessages("twitch", from, "*" + text + "*");
     }
 });
