@@ -56,7 +56,7 @@ beam.use('password', {
               compiled = compiled + data.message.message[i].text;
             }
           }
-            console.log('Beam message received! ' + compiled);
+            console.log('Beam message received! ' + data.user_name + ":" + compiled);
             sendMessages("beam", data.user_name, compiled);
       }
     });
@@ -86,7 +86,7 @@ if(config.discord.enabled) {
     Dbot.on('messageCreate', function (msg) {
         if (msg.author.id != Dbot.user.id && msg.channel.id == DChannelId) {
             sendMessages("discord", msg.author.username, msg.cleanContent?msg.cleanContent:msg.content);
-            console.log("Discord message received! " + msg.content + msg.cleanContent);
+            console.log("Discord message received! " + msg.author.username + ":" + msg.cleanContent?msg.cleanContent:msg.content);
         }
     });
 //Reconnect to discord server in case of websocket closed
@@ -114,7 +114,7 @@ Tbot.addListener("message" + config.twitch.channel, function (from, text, messag
 });
 Tbot.addListener("action", function (from, to, text, message) {
     if(to == config.twitch.channel){
-        console.log("Twitch action received! " + text);
+        console.log("Twitch action received! " + from + ":" + text);
         sendMessages("twitch", from, "*" + text + "*");
     }
 });
