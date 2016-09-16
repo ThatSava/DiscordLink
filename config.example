@@ -16,5 +16,11 @@
     "enabled":"true/false",
     "token":"bot user token from https://discordapp.com/developers/applications/me",
     "channelID":"id of a created text room on discord ie. streamchat"
+  },
+  "hitbox":{
+    "enabled":"true/false",
+    "username":"",
+    "password":"",
+    "channel":"lowercase username"
   }
 }

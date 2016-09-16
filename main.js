@@ -120,6 +120,28 @@ Tbot.addListener("action", function (from, to, text, message) {
 });
 }
 
+//Hitbox support
+if (config.hitbox.enabled){
+    var HitboxClient = require("hitbox-chat-lib");
+    var client = new HitboxClient({ username: config.hitbox.username, password: config.hitbox.password });
+    client.on("connect", function () {
+        console.info("Connected to hibox.");
+        var channel1 = client.joinChannel(config.hitbox.channel);
+        channel1.on("login", function (name, role) {
+            console.info("Logged in to hitbox as " + name + " (" + role + ")");
+        }).on("chat", function (name, text, role, params) {
+            console.log('Beam message received!' + name + ":" + text);
+            if(name != config.hitbox.username) {
+                sendMessages("hitbox", name, text);
+            }
+        }).on("info", function (text, action, params) {
+            console.log("Hitbox info" + text + " ("+ action+")");
+        });
+    }).on("disconnect", function () {
+        client = new HitboxClient({ username: config.hitbox.username, password: config.hitbox.password });
+    });
+}
+
 //Sends the messages
 function sendMessages(from, user, message){
     switch(from) {
@@ -130,6 +152,10 @@ function sendMessages(from, user, message){
             if(config.discord.enabled == "true"){
                 Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Beam").replace("%u", user) + message);
             }
+            if(config.hitbox.enabled) {
+                var textMess = getPrefix("hitbox").replace("%s", "Beam").replace("%u", user) + message;
+                client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
+            }
             break;
         case "twitch":
             if(config.discord.enabled == "true"){
@@ -137,6 +163,10 @@ function sendMessages(from, user, message){
             }
             if(config.beam.enabled == "true"){
                 socket.call('msg', [getPrefix("beam").replace("%s", "Twitch").replace("%u", user) + message ]);
+            }
+            if(config.hitbox.enabled) {
+                var textMess = getPrefix("hitbox").replace("%s", "Twitch").replace("%u", user) + message;
+                client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
             }
             break;
         case "discord":
@@ -146,5 +176,21 @@ function sendMessages(from, user, message){
             if (config.twitch.enabled == "true"){
                 Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Discord").replace("%u", user) + message);
             }
+            if(config.hitbox.enabled) {
+                var textMess = getPrefix("hitbox").replace("%s", "Discord").replace("%u", user) + message;
+                client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
+            }
+            break;
+        case "hitbox":
+            if(config.beam.enabled == "true"){
+                socket.call('msg', [getPrefix("beam").replace("%s", "Discord").replace("%u", user) + message ]);
+            }
+            if (config.twitch.enabled == "true"){
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Discord").replace("%u", user) + message);
+            }
+            if(config.discord.enabled == "true"){
+                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Twitch").replace("%u", user) + message);
+            }
+            break;
     }
 }
