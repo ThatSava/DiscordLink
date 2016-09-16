@@ -121,7 +121,7 @@ Tbot.addListener("action", function (from, to, text, message) {
 }
 
 //Hitbox support
-if (config.hitbox.enabled){
+if (config.hitbox.enabled == "true"){
     var HitboxClient = require("hitbox-chat-lib");
     var client = new HitboxClient({ username: config.hitbox.username, password: config.hitbox.password });
     client.on("connect", function () {
@@ -152,7 +152,7 @@ function sendMessages(from, user, message){
             if(config.discord.enabled == "true"){
                 Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Beam").replace("%u", user) + message);
             }
-            if(config.hitbox.enabled) {
+            if(config.hitbox.enabled == "true") {
                 var textMess = getPrefix("hitbox").replace("%s", "Beam").replace("%u", user) + message;
                 client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
             }
@@ -164,7 +164,7 @@ function sendMessages(from, user, message){
             if(config.beam.enabled == "true"){
                 socket.call('msg', [getPrefix("beam").replace("%s", "Twitch").replace("%u", user) + message ]);
             }
-            if(config.hitbox.enabled) {
+            if(config.hitbox.enabled == "true") {
                 var textMess = getPrefix("hitbox").replace("%s", "Twitch").replace("%u", user) + message;
                 client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
             }
@@ -176,7 +176,7 @@ function sendMessages(from, user, message){
             if (config.twitch.enabled == "true"){
                 Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Discord").replace("%u", user) + message);
             }
-            if(config.hitbox.enabled) {
+            if(config.hitbox.enabled  == "true") {
                 var textMess = getPrefix("hitbox").replace("%s", "Discord").replace("%u", user) + message;
                 client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
             }
