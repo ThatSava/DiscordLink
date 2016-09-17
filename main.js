@@ -183,13 +183,13 @@ function sendMessages(from, user, message){
             break;
         case "hitbox":
             if(config.beam.enabled == "true"){
-                socket.call('msg', [getPrefix("beam").replace("%s", "Discord").replace("%u", user) + message ]);
+                socket.call('msg', [getPrefix("beam").replace("%s", "Hitbox").replace("%u", user) + message ]);
             }
             if (config.twitch.enabled == "true"){
-                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Discord").replace("%u", user) + message);
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Hitbox").replace("%u", user) + message);
             }
             if(config.discord.enabled == "true"){
-                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Twitch").replace("%u", user) + message);
+                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Hitbox").replace("%u", user) + message);
             }
             break;
     }
