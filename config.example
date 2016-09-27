@@ -22,5 +22,6 @@
     "username":"",
     "password":"",
     "channel":"lowercase username"
-  }
+  },
+  "pidFile":"false/filename"
 }

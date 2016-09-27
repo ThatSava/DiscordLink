@@ -4,6 +4,7 @@ var irc = require('irc');
 var Eris = require('eris');
 var Beam = require('beam-client-node');
 var BeamSocket = require('beam-client-node/lib/ws');
+var path = require('path');
 
 //Custom prefixes and suffixes
 //Suggested by: @apple99er
@@ -14,6 +15,13 @@ function getPrefix(service){
     else {
         return "[%s:%u]";
     }
+}
+
+//PIDfile
+if(config.pidFile != "false"){
+    var npid = require('npid');
+    var pid = npid.create(path.resolve(__dirname, 'pid.log'));
+    pid.removeOnExit();
 }
 
 //Connect to beam server and listen to beam messages all in one
