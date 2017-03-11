@@ -84,7 +84,7 @@ beam.use('password', {
 }
 
 //Connect to discord server
-if(config.discord.enabled) {
+if(config.discord.enabled == "true") {
     var Dbot = new Eris(config.discord.token);
     Dbot.connect();
 //Get discord channelid
@@ -104,7 +104,7 @@ if(config.discord.enabled) {
 }
 
 //Connect to twitch server
-if(config.twitch.enabled){
+if(config.twitch.enabled == "true"){
 var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
   port: 6667,
   channels: [config.twitch.channel],
@@ -113,7 +113,9 @@ var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
   username: config.twitch.username,
   autoRejoin: true
 });
-Tbot.send('PASS', config.twitch.oauth);
+Tbot.on("error",function (error) {
+    console.log("Twitch error, this should be fine: "+ JSON.stringify(error))
+});
 
 //Listens to messages from twitch
 Tbot.addListener("message" + config.twitch.channel, function (from, text, message) {
