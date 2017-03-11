@@ -5,6 +5,7 @@ var Eris = require('eris');
 var Beam = require('beam-client-node');
 var BeamSocket = require('beam-client-node/lib/ws');
 var path = require('path');
+var fs = require("fs");
 
 //Custom prefixes and suffixes
 //Suggested by: @apple99er
@@ -20,7 +21,10 @@ function getPrefix(service){
 //PIDfile
 if(config.pidFile != "false"){
     var npid = require('npid');
-    var pid = npid.create(path.resolve(__dirname, 'pid.log'));
+    if (fs.existsSync(path.resolve(__dirname, config.pidFile))){
+        fs.unlink(path.resolve(__dirname, config.pidFile));
+    }
+    var pid = npid.create(path.resolve(__dirname, config.pidFile));
     pid.removeOnExit();
 }
 
