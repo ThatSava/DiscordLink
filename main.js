@@ -109,7 +109,7 @@ if(config.discord.enabled == "true") {
 
 //Connect to twitch server
 if(config.twitch.enabled == "true"){
-var Tbot = new irc.Client('irc.twitch.tv', config.twitch.username, {
+var Tbot = new irc.Client('irc.chat.twitch.tv', config.twitch.username, {
   port: 6667,
   channels: [config.twitch.channel],
   debug: false,
