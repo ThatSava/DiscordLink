@@ -33,7 +33,7 @@ if(config.mixer.enabled == "true"){
     var mixer = new Mixer.Client(new Mixer.DefaultRequestRunner());
     var socket;
 
-    var Muser = 0;
+    var MuserID = 0;
     var MchannelID = 0;
     
     mixer.use(new Mixer.OAuthProvider(mixer, {
@@ -44,7 +44,7 @@ if(config.mixer.enabled == "true"){
     }));
 
     mixer.request('GET', `users/current`).then(function (res) {
-        Muser = res.body.id;
+        MuserID = res.body.id;
         return mixer.request('get', '/channels/' + config.mixer.channel);
     }).then(function (res){
         MchannelID = res.body.id;
@@ -52,7 +52,7 @@ if(config.mixer.enabled == "true"){
     }).then(function (res) {
         var data = res.body;
         socket = new Mixer.Socket(ws, data.endpoints).boot();
-        return socket.auth(MchannelID, BuserID, data.authkey);
+        return socket.auth(MchannelID, MuserID, data.authkey);
     }).then(function(){
         console.log('You are now authenticated with mixer!');
         socket.on('ChatMessage', function (data) {
