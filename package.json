@@ -12,10 +12,11 @@
     "url": "https://github.com/andrejsavikin/DiscordLink/issues"
   },
   "dependencies": {
-    "beam-client-node": "^0.11.0",
+    "beam-client-node": "^1.0.2",
     "irc": "^0.5.2",
     "eris": "^0.6.0",
     "hitbox-chat-lib":"^0.8.10",
-    "npid":"^0.4.0"
+    "npid":"^0.4.0",
+    "ws": "^4.0.0"
   }
 }
