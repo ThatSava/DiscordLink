@@ -1,5 +1,5 @@
 # DiscordLink
-App that links beam.pro chat, twitch chat and discord
+App that links Mixer chat, Twitch chat and Discord
 
 ## Installation
 1. Download this repo and extract if needed `git clone https://github.com/andrejsavikin/DiscordLink.git`
@@ -18,14 +18,15 @@ App that links beam.pro chat, twitch chat and discord
 
 ### Notes
 * If there are multiple discord servers that contain a room with the same name, the bot will pick the first one
-* At this state beam 2FA is not supported
+* At this state mixer 2FA is not supported
 
 ### Config help
 * You can define an optional prefix in the settings(for each service).
-* %s will be replaced with the service name ie. Beam
+* %s will be replaced with the service name ie. Mixer
 * %u will be replaced with the user name ie. Sava
 * Default prefix format is `[%s:%u]`
 * To get discord channel ID, just enable developer options under settings -> appearance. Now you can right-click a channel and simply select copy ID.
+* To get your Mixer oauth key click [here](https://mixer.com/oauth/authorize?response_type=token&redirect_uri=https%3A%2F%2Fsavikin.me%2FgetMixerKey.html&scope=chat%3Aconnect%20chat%3Achat%20chat%3Abypass_slowchat&client_id=2c790ab21d5ea0e08a08260cc667e225914f2181d005562f)
 
 ### Contact
 [![Discord](https://discordapp.com/api/guilds/69730004467986432/widget.png?style=banner4)](https://discord.gg/jBRvWct)

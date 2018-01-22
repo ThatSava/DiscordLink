@@ -6,10 +6,9 @@
     "channel":"owner channel with # infront ie. #andrejsavikin",
     "prefix":"[%s:%u]"
   },
-  "beam":{
+  "mixer":{
     "enabled":"true/false",
-    "username":"beam username",
-    "password":"beam password",
+    "token":"Your mixer token, read the project info to learn how to get one",
     "channel":"channel name ie. Sava"
   },
   "discord":{
