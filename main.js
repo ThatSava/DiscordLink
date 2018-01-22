@@ -35,16 +35,19 @@ if(config.mixer.enabled == "true"){
 
     var MuserID = 0;
     var MchannelID = 0;
+    var MuserName = null;
+    var LastMsg = null;
     
     mixer.use(new Mixer.OAuthProvider(mixer, {
         tokens: {
             access: config.mixer.token,
             expires: Date.now() + (365 * 24 * 60 * 60 * 1000)
-        },
+        }
     }));
 
-    mixer.request('GET', `users/current`).then(function (res) {
+    mixer.request('GET', 'users/current').then(function (res) {
         MuserID = res.body.id;
+        MuserName = res.body.username;
         return mixer.request('get', '/channels/' + config.mixer.channel);
     }).then(function (res){
         MchannelID = res.body.id;
@@ -57,7 +60,7 @@ if(config.mixer.enabled == "true"){
         console.log('You are now authenticated with mixer!');
         socket.on('ChatMessage', function (data) {
 
-            if(data.user_name != config.mixer.username){
+
             var compiled = '';
             for(i in data.message.message) {
                 if (data.message.message[i].type == 'text'){
@@ -72,7 +75,8 @@ if(config.mixer.enabled == "true"){
                 compiled = compiled + data.message.message[i].text;
                 }
             }
-                console.log('mixer message received! ' + data.user_name + ":" + compiled);
+            if(LastMsg !== compiled){
+                console.log('Mixer message received! ' + data.user_name + ":" + compiled);
                 sendMessages("mixer", data.user_name, compiled);
         }
         });
@@ -171,13 +175,13 @@ function sendMessages(from, user, message){
     switch(from) {
         case "mixer":
             if (config.twitch.enabled == "true"){
-                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "mixer").replace("%u", user) + message);
+                Tbot.say(config.twitch.channel, getPrefix("twitch").replace("%s", "Mixer").replace("%u", user) + message);
             }
             if(config.discord.enabled == "true"){
-                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "mixer").replace("%u", user) + message);
+                Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Mixer").replace("%u", user) + message);
             }
             if(config.hitbox.enabled == "true") {
-                var textMess = getPrefix("hitbox").replace("%s", "mixer").replace("%u", user) + message;
+                var textMess = getPrefix("hitbox").replace("%s", "Mixer").replace("%u", user) + message;
                 client.send("chatMsg", {channel:config.hitbox.channel, text:textMess, nameColor: "FF00FF"});//TODO randomize color
             }
             break;
@@ -186,6 +190,7 @@ function sendMessages(from, user, message){
                 Dbot.createMessage(DChannelId, getPrefix("discord").replace("%s", "Twitch").replace("%u", user) + message);
             }
             if(config.mixer.enabled == "true"){
+                LastMsg = getPrefix("mixer").replace("%s", "Twitch").replace("%u", user) + message;
                 socket.call('msg', [getPrefix("mixer").replace("%s", "Twitch").replace("%u", user) + message ]);
             }
             if(config.hitbox.enabled == "true") {
@@ -195,6 +200,7 @@ function sendMessages(from, user, message){
             break;
         case "discord":
             if(config.mixer.enabled == "true"){
+                LastMsg = getPrefix("mixer").replace("%s", "Discord").replace("%u", user) + message;
                 socket.call('msg', [getPrefix("mixer").replace("%s", "Discord").replace("%u", user) + message ]);
             }
             if (config.twitch.enabled == "true"){
@@ -207,6 +213,7 @@ function sendMessages(from, user, message){
             break;
         case "hitbox":
             if(config.mixer.enabled == "true"){
+                LastMsg = getPrefix("mixer").replace("%s", "Hitbox").replace("%u", user) + message;
                 socket.call('msg', [getPrefix("mixer").replace("%s", "Hitbox").replace("%u", user) + message ]);
             }
             if (config.twitch.enabled == "true"){

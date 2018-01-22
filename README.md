@@ -26,6 +26,7 @@ App that links Mixer chat, Twitch chat and Discord
 * %u will be replaced with the user name ie. Sava
 * Default prefix format is `[%s:%u]`
 * To get discord channel ID, just enable developer options under settings -> appearance. Now you can right-click a channel and simply select copy ID.
+* To get your Mixer oauth key click [here](https://mixer.com/oauth/authorize?response_type=token&redirect_uri=https%3A%2F%2Fsavikin.me%2FgetMixerKey.html&scope=chat%3Aconnect%20chat%3Achat%20chat%3Abypass_slowchat&client_id=2c790ab21d5ea0e08a08260cc667e225914f2181d005562f)
 
 ### Contact
 [![Discord](https://discordapp.com/api/guilds/69730004467986432/widget.png?style=banner4)](https://discord.gg/jBRvWct)

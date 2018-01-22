@@ -1,15 +1,14 @@
 {
   "twitch":{
     "enabled":"true/false",
-    "username":"twitch username (to avoid double messages)",
+    "username":"twitch username",
     "oauth":"twtich oauth key",
     "channel":"owner channel with # infront ie. #andrejsavikin",
     "prefix":"[%s:%u]"
   },
   "mixer":{
     "enabled":"true/false",
-    "username":"twitch username (to avoid double messages)",
-    "token":"get token from the link that says [access: 'Click here to get your Token!'] from https://dev.mixer.com/tutorials/chatbot.html ",
+    "token":"Your mixer token, read the project info to learn how to get one",
     "channel":"channel name ie. Sava"
   },
   "discord":{
